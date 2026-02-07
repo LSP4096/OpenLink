@@ -1,0 +1,115 @@
+{
+    "inbounds": [
+        {
+            "strict_route": true,
+            "auto_route": true,
+            "inet4_route_exclude_address": [
+                "17.0.0.0/8"
+            ],
+            "stack": "gvisor",
+            "inet4_address": "172.19.0.1/30",
+            "inet6_address": "fdfe:dcba:9876::1/126",
+            "sniff": true,
+            "tag": "tun-in",
+            "type": "tun"
+        },
+        {
+            "tag": "mixed-in",
+            "listen_port": 30808,
+            "type": "mixed",
+            "listen": "127.0.0.1",
+            "set_system_proxy": false,
+            "sniff": true
+        }
+    ],
+    "route": {
+        "rules": [
+            {
+                "protocol": "dns",
+                "outbound": "dns-out"
+            },
+            {
+                "outbound": "proxy"
+            }
+        ],
+        "auto_detect_interface": true
+    },
+    "log": {
+        "level": "warn",
+        "timestamp": true
+    },
+    "dns": {
+        "rules": [],
+        "strategy": "ipv4_only",
+        "servers": [
+            {
+                "tag": "cloudflare-dns",
+                "address": "https://1.1.1.1/dns-query",
+                "detour": "proxy"
+            },
+            {
+                "address": "https://8.8.8.8/dns-query",
+                "detour": "proxy",
+                "tag": "google-dns"
+            },
+            {
+                "address": "223.5.5.5",
+                "detour": "direct",
+                "tag": "dns_direct"
+            },
+            {
+                "address": "1.1.1.1",
+                "detour": "proxy",
+                "tag": "dns_proxy"
+            },
+            {
+                "address": "rcode://success",
+                "tag": "dns_block"
+            }
+        ],
+        "final": "dns_direct"
+    },
+    "outbounds": [
+        {
+            "tag": "proxy",
+            "type": "vless",
+            "server": "38.180.242.242",
+            "server_port": 16140,
+            "uuid": "2c8d9e0f-1a3b-434c-5d6e-7f8a8b0c1d6e",
+            "tls": {
+                "enabled": true,
+                "server_name": "38.180.242.242",
+                "utls": {
+                    "fingerprint": "chrome",
+                    "enabled": true
+                },
+                "insecure": true,
+                "alpn": [
+                    "h2"
+                ]
+            },
+            "transport": {
+                "type": "xhttp",
+                "path": "/123",
+                "host": "38.180.242.242",
+                "mode": "auto"
+            }
+        },
+        {
+            "tag": "direct",
+            "type": "direct"
+        },
+        {
+            "type": "block",
+            "tag": "block"
+        },
+        {
+            "type": "dns",
+            "tag": "dns-out"
+        },
+        {
+            "type": "block",
+            "tag": "ads-block"
+        }
+    ]
+}
