@@ -1,0 +1,32 @@
+# Xcode 用户数据
+xcuserdata/
+*.xcuserstate
+*.xcbkptlist
+xcschememanagement.plist
+
+# 构建产物
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# CocoaPods
+Pods/
+Podfile.lock
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# 临时文件
+*.pyc
+*.py
+!**/*.swift
+.DS_Store
+*.swp
+*~
+
+# 编辑器
+.idea/
+.vscode/
