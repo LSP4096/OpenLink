@@ -36,6 +36,8 @@ extension Color {
             opacity: Double(a) / 255
         )
     }
+    
+    static let mainBackground = Color(hex: "#1C2F2C")
 }
 
 extension UIColor {
